@@ -96,7 +96,7 @@ class TicTacToe(Game):
         print(prompt)
         return [int(x.strip()) for x in input().split(',')]
 
-game = TicTacToe()
+game = TicTacToe(4)
 solver = Solver.Solver()
 gameManager = GameManager(game, solver)
 gameManager.play()
