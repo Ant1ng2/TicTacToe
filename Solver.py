@@ -77,6 +77,8 @@ class Solver():
         tieMove = game.generateMoves()[0]
         for move in game.generateMoves():
             newGame = game.doMove(move)
+            # The AI could pick a winning position that doesn't directly end the game.
+            # TODO: Pick a move to end the game
             if self.solve(newGame) == Value.LOSE:
                 return move
             if self.solve(newGame) == Value.TIE:
