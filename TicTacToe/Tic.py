@@ -1,20 +1,34 @@
 from copy import copy, deepcopy
-import sys
-sys.path.append('..')
 
-from Game import *
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+
+from Game import Game
 import Solver
 from GameManager import *
+from util import Value
 
 class TicTacToe(Game):
 
-    def __init__(self, size=3, board=None, turn="X", count=0):
-        if board == None:
-            self.board = []
+    def __init__(self, size=3, board="000000000", turn="X", count=0):
+        self.board = []
+        if not board:
             for i in range(size):
                 self.board += [[" " for _ in range(size)]]
         else:
-            self.board = board
+            row = []
+            for i in board:
+                if (i == '0'):
+                    row.append(" ")
+                if (i == '1'):
+                    row.append("X")
+                if (i == '2'):
+                    row.append("O")
+                if len(row) == size:
+                    self.board.append(row)
+                    row = []
         self.len = len(self.board)
         self.turn = turn
         self.count = count
@@ -54,7 +68,7 @@ class TicTacToe(Game):
         if self.count >= self.len * self.len:
             return self
         if move in self.generateMoves():
-            game = TicTacToe(self.len, deepcopy(self.board), self.turn, self.count)
+            game = TicTacToe(self.len, self.hash(), self.turn, self.count)
             game.addPiece(move[0], move[1])
         return game
 
@@ -92,11 +106,24 @@ class TicTacToe(Game):
             string += self.getPiece(i % self.len, i // self.len)
         return string
 
+    def hash(self):
+        string = ""
+        for row in self.board:
+            for char in row:
+                if char == " ":
+                    string += "0"            
+                if char == "X":
+                    string += "1"
+                if char == "O":
+                    string += "2"
+        return string
+
     def moveFromInput(self, prompt):
         print(prompt)
         return [int(x.strip()) for x in input().split(',')]
 
-game = TicTacToe(3)
-solver = Solver.Solver()
-gameManager = GameManager(game, solver)
-gameManager.play()
+if __name__ == '__main__':
+    game = TicTacToe(3)
+    solver = Solver.Solver()
+    gameManager = GameManager(game, solver)
+    gameManager.play()

@@ -1,6 +1,5 @@
 from util import *
 from Game import *
-import Solver
 
 class GameManager:
 
@@ -21,10 +20,11 @@ class GameManager:
     # Prints the game info
     def printInfo(self):
         if self.solver:
-            print("Solver: " + self.solver.solve(self.game))
-        print("Primitive: " + self.game.primitive())
+            print("Solver:", self.solver.solve(self.game))
+        print("Primitive:", self.game.primitive())
         print(self.game.getTurn(), "'s turn")
         print(self.game.toString())
+        print("Possible Moves:", self.game.generateMoves())
 
     # Prompts for input and moves
     def printTurn(self):
